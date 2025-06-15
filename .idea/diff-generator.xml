@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DiffGenerationConfig">
+    <option name="snapshotDbValue" value="cb38f180-943d-414b-b073-1ffae6e0170c" />
+    <option name="sourceDbValue" value="cb38f180-943d-414b-b073-1ffae6e0170c" />
+    <option name="sourceDiffType" value="DB" />
+    <option name="sourceModelValue" value="task-scheduler-backend.main:task-scheduler-backend.main" />
+    <option name="targetDbValue" value="cb38f180-943d-414b-b073-1ffae6e0170c" />
+  </component>
+</project>
