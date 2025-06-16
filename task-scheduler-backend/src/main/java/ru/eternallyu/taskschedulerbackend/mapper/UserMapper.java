@@ -1,13 +1,23 @@
 package ru.eternallyu.taskschedulerbackend.mapper;
 
-import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 import ru.eternallyu.taskschedulerbackend.entity.User;
 import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
 
-@Mapper
-public interface UserMapper {
+@Component
+public class UserMapper {
 
-    UserDto userToUserDto(User user);
+    public UserDto userToUserDto(User user) {
+        return UserDto.builder()
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .build();
+    }
 
-    User userDtoToUser(UserDto userDto);
+    public User userDtoToUser(UserDto userDto) {
+        return User.builder()
+                .password(userDto.getPassword())
+                .email(userDto.getEmail())
+                .build();
+    }
 }

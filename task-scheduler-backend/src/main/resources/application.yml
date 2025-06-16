@@ -14,3 +14,6 @@ spring:
 
 server:
   port: 8001
+
+jwt:
+  secret: dGhpcyBpcyBhIHN1cGVyIHNlY3JldCBrZXkgZm9yIGp3dA==

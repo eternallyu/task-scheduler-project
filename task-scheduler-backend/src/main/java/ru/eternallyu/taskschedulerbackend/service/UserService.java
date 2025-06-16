@@ -21,11 +21,11 @@ public class UserService {
         return userMapper.userToUserDto(user);
     }
 
-    public User createUser(User user) {
+    public void createUser(User user) {
         String userEmail = user.getEmail();
         if (userRepository.findByEmail(userEmail).isPresent()) {
             throw new AlreadyExistsException("User already exists");
         }
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 }
