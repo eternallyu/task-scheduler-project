@@ -5,19 +5,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.eternallyu.taskschedulerbackend.service.UserService;
-import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
+import ru.eternallyu.taskschedulerbackend.service.TaskService;
+import ru.eternallyu.taskschedulerbackend.service.dto.TaskDto;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
-public class UserController {
+public class TaskController {
 
-    private final UserService userService;
+    private final TaskService taskService;
 
-    @GetMapping("/info")
-    public UserDto getUserDetails(Authentication authentication) {
+    @GetMapping("/tasks")
+    public List<TaskDto> getUserTasks(Authentication authentication) {
         String email = authentication.getName();
-        return userService.findUserByEmail(email);
+        return taskService.findTasksByEmail(email);
     }
 }

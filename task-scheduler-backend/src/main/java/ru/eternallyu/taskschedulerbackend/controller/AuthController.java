@@ -1,5 +1,6 @@
 package ru.eternallyu.taskschedulerbackend.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Object> registerHandler(@RequestBody UserDto userDto) {
+    public Map<String, Object> registerHandler(@Valid @RequestBody UserDto userDto) {
         authService.registerUser(userDto);
         String JWTToken = jwtUtils.generateToken(userDto.getEmail());
         return Collections.singletonMap("jwt-token", JWTToken);
@@ -29,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> loginHandler(@RequestBody UserDto userDto) {
+    public Map<String, Object> loginHandler(@Valid @RequestBody UserDto userDto) {
         authService.loginUser(userDto);
         String JWTToken = jwtUtils.generateToken(userDto.getEmail());
         return Collections.singletonMap("jwt-token", JWTToken);

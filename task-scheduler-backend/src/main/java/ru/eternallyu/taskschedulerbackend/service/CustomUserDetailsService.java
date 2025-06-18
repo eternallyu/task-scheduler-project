@@ -15,13 +15,15 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
+    public static final String ROLE_USER = "ROLE_USER";
+
     private final UserService userService;
 
     private final UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        UserDto userDto = userService.findByEmail(email);
+        UserDto userDto = userService.findUserByEmail(email);
         User user = userMapper.userDtoToUser(userDto);
 
         return new
@@ -29,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 email,
                 user.getPassword(),
                 Collections.singletonList(
-                        new SimpleGrantedAuthority("ROLE_USER")
+                        new SimpleGrantedAuthority(ROLE_USER)
                 )
         );
     }
