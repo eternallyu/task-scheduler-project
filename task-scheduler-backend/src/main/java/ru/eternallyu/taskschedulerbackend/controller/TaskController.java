@@ -47,4 +47,11 @@ public class TaskController {
         return taskService.updateTaskStatus(id, updateStatusDto.isStatus(), email);
 
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteTask(Authentication authentication, @PathVariable Long id) {
+        String email = authentication.getName();
+        taskService.deleteTask(id, email);
+    }
 }

@@ -80,4 +80,18 @@ public class TaskService {
             throw new NotFoundException("Task with id " + id + " not found");
         }
     }
+
+    public void deleteTask(Long id, String userEmail) {
+        Optional<Task> mayBeTask = taskRepository.findById(id);
+        if (mayBeTask.isPresent()) {
+            Task taskToDelete = mayBeTask.get();
+            if (taskToDelete.getUser().getEmail().equals(userEmail)) {
+                taskRepository.delete(taskToDelete);
+            } else {
+                throw new UserAuthenticationException("This is another user's task");
+            }
+        } else {
+            throw new NotFoundException("Task with id " + id + " not found");
+        }
+    }
 }
