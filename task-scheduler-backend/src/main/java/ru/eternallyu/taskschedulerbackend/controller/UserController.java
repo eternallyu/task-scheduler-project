@@ -15,7 +15,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/info")
+    @GetMapping
     public UserDto getUserDetails(Authentication authentication) {
         String email = authentication.getName();
         return userService.findUserByEmail(email);
