@@ -9,6 +9,7 @@ import ru.eternallyu.taskschedulerbackend.exception.UserAuthenticationException;
 import ru.eternallyu.taskschedulerbackend.mapper.TaskMapper;
 import ru.eternallyu.taskschedulerbackend.mapper.UserMapper;
 import ru.eternallyu.taskschedulerbackend.repository.TaskRepository;
+import ru.eternallyu.taskschedulerbackend.repository.UserRepository;
 import ru.eternallyu.taskschedulerbackend.service.dto.task.CreateTaskDto;
 import ru.eternallyu.taskschedulerbackend.service.dto.task.TaskDto;
 
@@ -22,11 +23,9 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     private final TaskMapper taskMapper;
-
-    private final UserMapper userMapper;
 
 
     public List<TaskDto> findTasksByEmail(String email) {
@@ -35,63 +34,57 @@ public class TaskService {
     }
 
     public TaskDto createTask(CreateTaskDto createTaskDto, String email) {
-        User user = userMapper.userDtoToUser(userService.findUserByEmail(email));
-        Task taskToSave = Task.builder()
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        Task task = Task.builder()
                 .user(user)
                 .title(createTaskDto.getTitle())
                 .description(createTaskDto.getDescription())
                 .build();
-        Task savedTask = taskRepository.save(taskToSave);
-        return taskMapper.taskToTaskDto(savedTask);
+
+        Task saved = taskRepository.save(task);
+
+        return taskMapper.taskToTaskDto(saved);
     }
 
-    public TaskDto updateTask(Long id, CreateTaskDto createTaskDto, String userEmail) {
-        Optional<Task> mayBeTask = taskRepository.findById(id);
-        if (mayBeTask.isPresent()) {
-            Task taskToUpdate = mayBeTask.get();
-            if (taskToUpdate.getUser().getEmail().equals(userEmail)) {
-                taskToUpdate.setTitle(createTaskDto.getTitle());
-                taskToUpdate.setDescription(createTaskDto.getDescription());
-                return taskMapper.taskToTaskDto(taskRepository.save(taskToUpdate));
-            } else {
-                throw new UserAuthenticationException("This is another user's task");
-            }
-        } else {
-            throw new NotFoundException("Task with id " + id + " not found");
-        }
+    public TaskDto updateTask(Long id, CreateTaskDto dto, String userEmail) {
+        Task task = taskRepository
+                .findByIdAndUserEmail(id, userEmail)
+                .orElseThrow(() ->
+                        new NotFoundException("Task with id " + id + " not found"));
+
+        task.setTitle(dto.getTitle());
+        task.setDescription(dto.getDescription());
+        Task saved = taskRepository.save(task);
+
+        return taskMapper.taskToTaskDto(saved);
     }
 
     public TaskDto updateTaskStatus(Long id, boolean status, String userEmail) {
-        Optional<Task> mayBeTask = taskRepository.findById(id);
-        if (mayBeTask.isPresent()) {
-            Task taskToUpdate = mayBeTask.get();
-            if (taskToUpdate.getUser().getEmail().equals(userEmail)) {
-                taskToUpdate.setStatus(status);
-                if (status) {
-                    taskToUpdate.setCompletedAt(LocalDateTime.now());
-                } else {
-                    taskToUpdate.setCompletedAt(null);
-                }
-                return taskMapper.taskToTaskDto(taskRepository.save(taskToUpdate));
-            } else {
-                throw new UserAuthenticationException("This is another user's task");
-            }
+        Task task = taskRepository
+                .findByIdAndUserEmail(id, userEmail)
+                .orElseThrow(() ->
+                        new NotFoundException("Task with id " + id + " not found"));
+
+        task.setStatus(status);
+        if (status) {
+            task.setCompletedAt(LocalDateTime.now());
         } else {
-            throw new NotFoundException("Task with id " + id + " not found");
+            task.setCompletedAt(null);
         }
+        Task saved = taskRepository.save(task);
+
+        return taskMapper.taskToTaskDto(saved);
     }
 
     public void deleteTask(Long id, String userEmail) {
-        Optional<Task> mayBeTask = taskRepository.findById(id);
-        if (mayBeTask.isPresent()) {
-            Task taskToDelete = mayBeTask.get();
-            if (taskToDelete.getUser().getEmail().equals(userEmail)) {
-                taskRepository.delete(taskToDelete);
-            } else {
-                throw new UserAuthenticationException("This is another user's task");
-            }
-        } else {
-            throw new NotFoundException("Task with id " + id + " not found");
-        }
+        Task task = taskRepository
+                .findByIdAndUserEmail(id, userEmail)
+                .orElseThrow(() ->
+                        new NotFoundException("Task with id " + id + " not found"));
+
+        taskRepository.delete(task);
     }
 }
