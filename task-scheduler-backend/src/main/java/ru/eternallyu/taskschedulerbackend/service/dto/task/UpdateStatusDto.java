@@ -1,29 +1,17 @@
 package ru.eternallyu.taskschedulerbackend.service.dto.task;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDto {
+public class UpdateStatusDto {
 
-    private Long id;
-
-    private String title;
-
-    private String description;
-
-    private String userEmail;
-
-    private LocalDateTime createdAt;
-
+    @NotNull
     private boolean status;
-
-    private LocalDateTime completedAt;
 }

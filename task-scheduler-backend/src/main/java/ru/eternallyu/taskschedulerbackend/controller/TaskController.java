@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.eternallyu.taskschedulerbackend.service.TaskService;
 import ru.eternallyu.taskschedulerbackend.service.dto.task.CreateTaskDto;
 import ru.eternallyu.taskschedulerbackend.service.dto.task.TaskDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.task.UpdateStatusDto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,8 +28,23 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDto createTask(@Valid @RequestBody CreateTaskDto createTaskDto, Authentication authentication) {
+    public TaskDto createTask(Authentication authentication, @Valid @RequestBody CreateTaskDto createTaskDto) {
         String email = authentication.getName();
-        return taskService.createTask(email, createTaskDto);
+        return taskService.createTask(createTaskDto, email);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskDto updateTask(Authentication authentication, @PathVariable Long id, @RequestBody CreateTaskDto createTaskDto) {
+        String email = authentication.getName();
+        return taskService.updateTask(id, createTaskDto, email);
+    }
+
+    @PatchMapping("/{id}/status")
+    @ResponseStatus(HttpStatus.OK)
+    TaskDto updateTaskStatus(Authentication authentication, @PathVariable Long id, @Valid @RequestBody UpdateStatusDto updateStatusDto) {
+        String email = authentication.getName();
+        return taskService.updateTaskStatus(id, updateStatusDto.isStatus(), email);
+
     }
 }
