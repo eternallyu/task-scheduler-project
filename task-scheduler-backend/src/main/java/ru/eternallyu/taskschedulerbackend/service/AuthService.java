@@ -1,12 +1,14 @@
 package ru.eternallyu.taskschedulerbackend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.eternallyu.taskschedulerbackend.configuration.kafka.KafkaProducerConfig;
 import ru.eternallyu.taskschedulerbackend.entity.User;
 import ru.eternallyu.taskschedulerbackend.exception.UserAuthenticationException;
 import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
@@ -21,6 +23,8 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
 
+    private final KafkaProducerConfig kafkaProducer;
+
     public void registerUser(UserDto userDto) {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
 
@@ -28,6 +32,8 @@ public class AuthService {
                 .email(userDto.getEmail())
                 .password(encodedPassword)
                 .build();
+
+        kafkaProducer.sendMessage(newUser.getEmail());
 
         userService.createUser(newUser);
     }
