@@ -1,4 +1,4 @@
-package ru.eternallyu.taskschedulerbackend.configuration.kafka;
+package ru.eternallyu.taskschedulerservice.configuration.kafka;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -12,13 +12,13 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import ru.eternallyu.taskschedulerbackend.service.dto.kafka.EmailSendingDto;
+import ru.eternallyu.taskschedulerservice.service.dto.kafka.EmailSendingDto;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.eternallyu.taskschedulerbackend.util.KafkaUtils.bootstrapAddress;
-import static ru.eternallyu.taskschedulerbackend.util.KafkaUtils.kafkaTopicName;
+import static util.KafkaUtils.bootstrapAddress;
+import static util.KafkaUtils.kafkaTopicName;
 
 @Configuration
 public class KafkaTopicConfig {

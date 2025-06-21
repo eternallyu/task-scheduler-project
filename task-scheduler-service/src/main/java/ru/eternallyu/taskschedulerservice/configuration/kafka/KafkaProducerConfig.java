@@ -1,14 +1,12 @@
-package ru.eternallyu.taskschedulerbackend.configuration.kafka;
+package ru.eternallyu.taskschedulerservice.configuration.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
-import ru.eternallyu.taskschedulerbackend.service.dto.kafka.EmailSendingDto;
+import ru.eternallyu.taskschedulerservice.service.dto.kafka.EmailSendingDto;
 
 import java.util.concurrent.CompletableFuture;
-
-import static ru.eternallyu.taskschedulerbackend.util.KafkaUtils.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,3 +27,4 @@ public class KafkaProducerConfig {
         });
     }
 }
+

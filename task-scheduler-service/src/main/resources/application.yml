@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: task-scheduler-service
+  kafka:
+    bootstrap-servers: localhost:29092
+
+server:
+  port: 8002
+
+task:
+  cron:
+    expression: 0 0 0 * * *
+
+kafka:
+  topic:
+    name: EMAIL_SEN
+  email:
+    type: WELCOME

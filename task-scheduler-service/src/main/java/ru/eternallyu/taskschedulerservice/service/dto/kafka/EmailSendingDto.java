@@ -1,4 +1,4 @@
-package ru.eternallyu.taskschedulerbackend.service.dto.kafka;
+package ru.eternallyu.taskschedulerservice.service.dto.kafka;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

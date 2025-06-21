@@ -17,7 +17,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        backs: 1
+        acks: 1
         spring:
           json:
             add:
@@ -29,3 +29,9 @@ server:
 
 jwt:
   secret: dGhpcyBpcyBhIHN1cGVyIHNlY3JldCBrZXkgZm9yIGp3dA==
+
+kafka:
+  topic:
+    name: EMAIL_SEN
+  email:
+    type: WELCOME
