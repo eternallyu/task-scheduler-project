@@ -18,13 +18,11 @@ public class AuthController {
 
     private final AuthService authService;
 
-    private final JwtUtils jwtUtils;
-
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public Map<String, Object> registerHandler(@Valid @RequestBody UserDto userDto) {
         authService.registerUser(userDto);
-        String JWTToken = jwtUtils.generateToken(userDto.getEmail());
+        String JWTToken = JwtUtils.generateToken(userDto.getEmail());
         return Collections.singletonMap("jwt-token", JWTToken);
     }
 
@@ -32,7 +30,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Object> loginHandler(@Valid @RequestBody UserDto userDto) {
         authService.loginUser(userDto);
-        String JWTToken = jwtUtils.generateToken(userDto.getEmail());
+        String JWTToken = JwtUtils.generateToken(userDto.getEmail());
         return Collections.singletonMap("jwt-token", JWTToken);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.eternallyu.taskschedulerbackend.configuration.kafka.KafkaProducerConfig;
+import ru.eternallyu.taskschedulerbackend.configuration.kafka.KafkaProperties;
 import ru.eternallyu.taskschedulerbackend.entity.User;
 import ru.eternallyu.taskschedulerbackend.exception.UserAuthenticationException;
 import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
@@ -25,6 +26,8 @@ public class AuthService {
 
     private final KafkaProducerConfig kafkaProducer;
 
+    private final KafkaProperties kafkaProperties;
+
     public void registerUser(UserDto userDto) {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
 
@@ -37,7 +40,7 @@ public class AuthService {
         String message = KafkaUtils.generateWelcomeMessage(email);
         EmailSendingDto emailSendingDto = EmailSendingDto.builder()
                 .to(email)
-                .type(KafkaUtils.welcomeEmailType)
+                .type(kafkaProperties.getWelcomeEmailType())
                 .message(message)
                 .build();
         kafkaProducer.sendMessage(emailSendingDto);

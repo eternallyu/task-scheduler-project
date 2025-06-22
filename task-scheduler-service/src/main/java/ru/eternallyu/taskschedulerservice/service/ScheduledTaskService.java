@@ -1,5 +1,6 @@
 package ru.eternallyu.taskschedulerservice.service;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,14 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduledTaskService {
 
+    private final ReportGeneratorService reportGenerator;
+
     private final KafkaProducerConfig kafkaProducer;
 
     @Scheduled(cron = "${task.cron.expression}")
     public void generateScheduledReport() {
-        log.info("Generate scheduled report");
+        log.info("Generating scheduled report");
         List<EmailSendingDto> reports = reportGenerator.generateAllReports();
-        log.info("Generate scheduled report completed");
+
+        log.info("Sending messages to kafka");
         reports.forEach(kafkaProducer::sendMessage);
-        log.info("Reports send to kafka");
     }
 }

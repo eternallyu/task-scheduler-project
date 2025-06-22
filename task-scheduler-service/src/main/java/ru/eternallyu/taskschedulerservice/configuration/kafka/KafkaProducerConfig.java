@@ -14,8 +14,10 @@ public class KafkaProducerConfig {
 
     private final KafkaTemplate<String, EmailSendingDto> kafkaTemplate;
 
+    private final KafkaProperties kafkaProperties;
+
     public void sendMessage(EmailSendingDto emailSendingDto) {
-        CompletableFuture<SendResult<String, EmailSendingDto>> future = kafkaTemplate.send(kafkaTopicName, emailSendingDto);
+        CompletableFuture<SendResult<String, EmailSendingDto>> future = kafkaTemplate.send(kafkaProperties.getKafkaTopicName(), emailSendingDto);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
                 System.out.println("Sent message=[" + emailSendingDto +

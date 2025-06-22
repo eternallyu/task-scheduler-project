@@ -1,5 +1,6 @@
 package ru.eternallyu.taskschedulerservice.configuration.kafka;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -17,16 +18,17 @@ import ru.eternallyu.taskschedulerservice.service.dto.kafka.EmailSendingDto;
 import java.util.HashMap;
 import java.util.Map;
 
-import static util.KafkaUtils.bootstrapAddress;
-import static util.KafkaUtils.kafkaTopicName;
 
 @Configuration
+@RequiredArgsConstructor
 public class KafkaTopicConfig {
+
+    private final KafkaProperties kafkaProperties;
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapAddress());
         return new KafkaAdmin(configs);
     }
 
@@ -35,7 +37,7 @@ public class KafkaTopicConfig {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                bootstrapAddress);
+                kafkaProperties.getBootstrapAddress());
         configProps.put(
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
@@ -47,7 +49,7 @@ public class KafkaTopicConfig {
 
     @Bean
     NewTopic createTopic() {
-        return TopicBuilder.name(kafkaTopicName)
+        return TopicBuilder.name(kafkaProperties.getKafkaTopicName())
                 .partitions(3)
                 .replicas(1)
                 .configs(Map.of("min.insync.replicas", "1"))

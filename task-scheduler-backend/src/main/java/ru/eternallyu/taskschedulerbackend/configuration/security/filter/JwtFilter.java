@@ -21,7 +21,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
 
     @Override
@@ -46,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         try {
-            String email = jwtUtils.validateTokenAndRetrieveSubject(token);
+            String email = JwtUtils.validateTokenAndRetrieveSubject(token);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 

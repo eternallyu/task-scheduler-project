@@ -8,16 +8,16 @@ import ru.eternallyu.taskschedulerbackend.service.dto.kafka.EmailSendingDto;
 
 import java.util.concurrent.CompletableFuture;
 
-import static ru.eternallyu.taskschedulerbackend.util.KafkaUtils.*;
-
 @Configuration
 @RequiredArgsConstructor
 public class KafkaProducerConfig {
 
+    private final KafkaProperties kafkaProperties;
+
     private final KafkaTemplate<String, EmailSendingDto> kafkaTemplate;
 
     public void sendMessage(EmailSendingDto emailSendingDto) {
-        CompletableFuture<SendResult<String, EmailSendingDto>> future = kafkaTemplate.send(kafkaTopicName, emailSendingDto);
+        CompletableFuture<SendResult<String, EmailSendingDto>> future = kafkaTemplate.send(kafkaProperties.getKafkaTopicName(), emailSendingDto);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
                 System.out.println("Sent message=[" + emailSendingDto +

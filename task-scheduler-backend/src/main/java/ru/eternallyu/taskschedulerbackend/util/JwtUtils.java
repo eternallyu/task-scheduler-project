@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
 @UtilityClass
 public class JwtUtils {
 
