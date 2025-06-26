@@ -1,28 +1,31 @@
 spring:
   application:
     name: task-scheduler-backend
+
   datasource:
     username: db_user
     password: password
     url: jdbc:postgresql://localhost:5454/task-scheduler-storage
     driver-class-name: org.postgresql.Driver
+
   jpa:
     properties.hibernate:
       show_sql: true
       format_sql: true
-      hbm2ddl.auto: validate
+    hibernate:
+      hbm2ddl:
+        auto: validate
+
   kafka:
     bootstrap-servers: localhost:29092
+
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
       properties:
         acks: 1
-        spring:
-          json:
-            add:
-              type:
-                headers: false
+        spring.json.add.type.headers: false
 
 server:
   port: 8001

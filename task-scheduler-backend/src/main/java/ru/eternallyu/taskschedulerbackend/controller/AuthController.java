@@ -2,6 +2,7 @@ package ru.eternallyu.taskschedulerbackend.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.eternallyu.taskschedulerbackend.service.AuthService;
@@ -18,11 +19,14 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @Value("${jwt.secret}")
+    private String secret;
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public Map<String, Object> registerHandler(@Valid @RequestBody UserRequestDto userRequestDto) {
         authService.registerUser(userRequestDto);
-        String JWTToken = JwtUtils.generateToken(userRequestDto.getEmail());
+        String JWTToken = JwtUtils.generateToken(userRequestDto.getEmail(), secret);
         return Collections.singletonMap("jwt-token", JWTToken);
     }
 
@@ -30,7 +34,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Object> loginHandler(@Valid @RequestBody UserRequestDto userRequestDto) {
         authService.loginUser(userRequestDto);
-        String JWTToken = JwtUtils.generateToken(userRequestDto.getEmail());
+        String JWTToken = JwtUtils.generateToken(userRequestDto.getEmail(), secret);
         return Collections.singletonMap("jwt-token", JWTToken);
     }
 }
