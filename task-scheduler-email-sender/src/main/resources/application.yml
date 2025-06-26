@@ -22,6 +22,7 @@ spring:
     properties:
       mail:
         smtp:
+          from: ${spring.mail.username}
           auth: true
           starttls:
             enable: true
