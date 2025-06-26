@@ -9,6 +9,8 @@ import ru.eternallyu.taskschedulerbackend.exception.NotFoundException;
 import ru.eternallyu.taskschedulerbackend.mapper.UserMapper;
 import ru.eternallyu.taskschedulerbackend.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -27,5 +29,10 @@ public class UserService {
             throw new AlreadyExistsException("User already exists");
         }
         userRepository.save(user);
+    }
+
+    public List<UserDto> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(userMapper::userToUserDto).toList();
     }
 }

@@ -87,4 +87,9 @@ public class TaskService {
 
         taskRepository.delete(task);
     }
+
+    public List<TaskDto> findTasksByUserId(Long id) {
+        List<Task> tasks = taskRepository.findAllByUserId(id);
+        return tasks.stream().map(taskMapper::taskToTaskDto).toList();
+    }
 }

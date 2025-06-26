@@ -36,6 +36,7 @@ public class SpringSecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/user/**").authenticated()
+                        .requestMatchers("/api/users").permitAll()
                         .anyRequest().authenticated())
                 .userDetailsService(userDetailsService)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
