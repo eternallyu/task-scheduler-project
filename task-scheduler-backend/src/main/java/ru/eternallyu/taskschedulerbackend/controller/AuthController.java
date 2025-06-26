@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.eternallyu.taskschedulerbackend.service.AuthService;
-import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.UserRequestDto;
 import ru.eternallyu.taskschedulerbackend.util.JwtUtils;
 
 import java.util.Collections;
@@ -20,17 +20,17 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Object> registerHandler(@Valid @RequestBody UserDto userDto) {
-        authService.registerUser(userDto);
-        String JWTToken = JwtUtils.generateToken(userDto.getEmail());
+    public Map<String, Object> registerHandler(@Valid @RequestBody UserRequestDto userRequestDto) {
+        authService.registerUser(userRequestDto);
+        String JWTToken = JwtUtils.generateToken(userRequestDto.getEmail());
         return Collections.singletonMap("jwt-token", JWTToken);
     }
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public Map<String, Object> loginHandler(@Valid @RequestBody UserDto userDto) {
-        authService.loginUser(userDto);
-        String JWTToken = JwtUtils.generateToken(userDto.getEmail());
+    public Map<String, Object> loginHandler(@Valid @RequestBody UserRequestDto userRequestDto) {
+        authService.loginUser(userRequestDto);
+        String JWTToken = JwtUtils.generateToken(userRequestDto.getEmail());
         return Collections.singletonMap("jwt-token", JWTToken);
     }
 }

@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.eternallyu.taskschedulerbackend.service.TaskService;
 import ru.eternallyu.taskschedulerbackend.service.UserService;
-import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.UserRequestDto;
 import ru.eternallyu.taskschedulerbackend.service.dto.task.TaskDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.UserResponseDto;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ReportController {
     private final TaskService taskService;
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
+    public List<UserResponseDto> getAllUsers() {
         return userService.findAllUsers();
     }
 

@@ -10,7 +10,7 @@ import ru.eternallyu.taskschedulerbackend.configuration.kafka.KafkaProducerConfi
 import ru.eternallyu.taskschedulerbackend.configuration.kafka.KafkaProperties;
 import ru.eternallyu.taskschedulerbackend.entity.User;
 import ru.eternallyu.taskschedulerbackend.exception.UserAuthenticationException;
-import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.UserRequestDto;
 import ru.eternallyu.taskschedulerbackend.service.dto.kafka.EmailSendingDto;
 import ru.eternallyu.taskschedulerbackend.util.KafkaUtils;
 
@@ -28,11 +28,11 @@ public class AuthService {
 
     private final KafkaProperties kafkaProperties;
 
-    public void registerUser(UserDto userDto) {
-        String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+    public void registerUser(UserRequestDto userRequestDto) {
+        String encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
 
         User newUser = User.builder()
-                .email(userDto.getEmail())
+                .email(userRequestDto.getEmail())
                 .password(encodedPassword)
                 .build();
 
@@ -48,10 +48,10 @@ public class AuthService {
         userService.createUser(newUser);
     }
 
-    public void loginUser(UserDto userDto) {
+    public void loginUser(UserRequestDto userRequestDto) {
         try {
             UsernamePasswordAuthenticationToken authInputToken =
-                    new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword());
+                    new UsernamePasswordAuthenticationToken(userRequestDto.getEmail(), userRequestDto.getPassword());
             authenticationManager.authenticate(authInputToken);
         } catch (AuthenticationException exception) {
             throw new UserAuthenticationException("Invalid email or password");

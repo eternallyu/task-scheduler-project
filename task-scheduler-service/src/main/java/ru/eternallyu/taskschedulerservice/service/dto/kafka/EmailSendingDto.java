@@ -1,9 +1,6 @@
 package ru.eternallyu.taskschedulerservice.service.dto.kafka;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Getter

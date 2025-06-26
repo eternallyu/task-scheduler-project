@@ -26,4 +26,7 @@ app:
     topic:
       name: EMAIL_SENDING_TASKS
     email:
-      type: WELCOME
+      type: REPORT
+
+backend:
+  base-url: http://localhost:8001

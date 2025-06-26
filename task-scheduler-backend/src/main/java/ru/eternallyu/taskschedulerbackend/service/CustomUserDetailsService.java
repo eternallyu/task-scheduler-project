@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import ru.eternallyu.taskschedulerbackend.entity.User;
 import ru.eternallyu.taskschedulerbackend.mapper.UserMapper;
-import ru.eternallyu.taskschedulerbackend.service.dto.UserDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.UserRequestDto;
 
 import java.util.Collections;
 
@@ -23,8 +23,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        UserDto userDto = userService.findUserByEmail(email);
-        User user = userMapper.userDtoToUser(userDto);
+        UserRequestDto userRequestDto = userService.findUserByEmail(email);
+        User user = userMapper.userDtoToUser(userRequestDto);
 
         return new
                 org.springframework.security.core.userdetails.User(

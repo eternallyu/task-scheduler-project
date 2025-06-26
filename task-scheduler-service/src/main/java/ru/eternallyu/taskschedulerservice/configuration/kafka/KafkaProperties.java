@@ -12,7 +12,7 @@ public class KafkaProperties {
     private String kafkaTopicName;
 
     @Value(value = "${app.kafka.email.type}")
-    private String welcomeEmailType;
+    private String reportEmailType;
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
