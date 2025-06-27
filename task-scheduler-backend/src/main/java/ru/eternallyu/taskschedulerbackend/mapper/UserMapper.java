@@ -2,30 +2,30 @@ package ru.eternallyu.taskschedulerbackend.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.eternallyu.taskschedulerbackend.entity.User;
-import ru.eternallyu.taskschedulerbackend.service.dto.user.UserRequestDto;
-import ru.eternallyu.taskschedulerbackend.service.dto.user.UserResponseDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.RequestUserDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.ResponseUserDto;
 
 @Component
 public class UserMapper {
 
-    public UserRequestDto userToUserRequestDto(User user) {
-        return UserRequestDto.builder()
+    public RequestUserDto userToUserRequestDto(User user) {
+        return RequestUserDto.builder()
                 .password(user.getPassword())
                 .email(user.getEmail())
                 .build();
     }
 
-    public UserResponseDto userToUserResponseDto(User user) {
-        return UserResponseDto.builder()
+    public ResponseUserDto userToUserResponseDto(User user) {
+        return ResponseUserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .build();
     }
 
-    public User userDtoToUser(UserRequestDto userRequestDto) {
+    public User userDtoToUser(RequestUserDto requestUserDto) {
         return User.builder()
-                .password(userRequestDto.getPassword())
-                .email(userRequestDto.getEmail())
+                .password(requestUserDto.getPassword())
+                .email(requestUserDto.getEmail())
                 .build();
     }
 }

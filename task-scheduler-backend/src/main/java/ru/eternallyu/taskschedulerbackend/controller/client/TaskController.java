@@ -1,4 +1,4 @@
-package ru.eternallyu.taskschedulerbackend.controller;
+package ru.eternallyu.taskschedulerbackend.controller.client;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.eternallyu.taskschedulerbackend.service.TaskService;
-import ru.eternallyu.taskschedulerbackend.service.dto.task.CreateTaskDto;
-import ru.eternallyu.taskschedulerbackend.service.dto.task.TaskDto;
-import ru.eternallyu.taskschedulerbackend.service.dto.task.UpdateStatusDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.task.RequestCreateTaskDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.task.RequestUpdateTaskStatusDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.task.ResponseTaskDto;
 
 import java.util.List;
 
@@ -21,30 +21,30 @@ public class TaskController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TaskDto> getUserTasks(Authentication authentication) {
+    public List<ResponseTaskDto> getUserTasks(Authentication authentication) {
         String email = authentication.getName();
         return taskService.findTasksByEmail(email);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TaskDto createTask(Authentication authentication, @Valid @RequestBody CreateTaskDto createTaskDto) {
+    public ResponseTaskDto createTask(Authentication authentication, @Valid @RequestBody RequestCreateTaskDto requestCreateTaskDto) {
         String email = authentication.getName();
-        return taskService.createTask(createTaskDto, email);
+        return taskService.createTask(requestCreateTaskDto, email);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskDto updateTask(Authentication authentication, @PathVariable Long id, @RequestBody CreateTaskDto createTaskDto) {
+    public ResponseTaskDto updateTask(Authentication authentication, @PathVariable Long id, @RequestBody RequestCreateTaskDto requestCreateTaskDto) {
         String email = authentication.getName();
-        return taskService.updateTask(id, createTaskDto, email);
+        return taskService.updateTask(id, requestCreateTaskDto, email);
     }
 
     @PatchMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
-    TaskDto updateTaskStatus(Authentication authentication, @PathVariable Long id, @Valid @RequestBody UpdateStatusDto updateStatusDto) {
+    ResponseTaskDto updateTaskStatus(Authentication authentication, @PathVariable Long id, @Valid @RequestBody RequestUpdateTaskStatusDto requestUpdateTaskStatusDto) {
         String email = authentication.getName();
-        return taskService.updateTaskStatus(id, updateStatusDto.isStatus(), email);
+        return taskService.updateTaskStatus(id, requestUpdateTaskStatusDto.isStatus(), email);
 
     }
 

@@ -1,4 +1,4 @@
-package ru.eternallyu.taskschedulerbackend.service.dto.user;
+package ru.eternallyu.taskschedulerbackend.service.dto.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDto {
+public class ErrorDto {
 
-    private Long id;
-
-    private String email;
+    private String errorMessage;
 }

@@ -2,7 +2,6 @@ package ru.eternallyu.taskschedulerservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.eternallyu.taskschedulerservice.configuration.kafka.KafkaProperties;
 import ru.eternallyu.taskschedulerservice.http.BackendClient;
@@ -14,9 +13,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
 @Log4j2
+@RequiredArgsConstructor
+@Service
 public class ReportGeneratorService {
 
     private final KafkaProperties kafkaProperties;

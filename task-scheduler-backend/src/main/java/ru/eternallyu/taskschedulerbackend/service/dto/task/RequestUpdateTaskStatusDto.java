@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateStatusDto {
+public class RequestUpdateTaskStatusDto {
 
     @NotNull
     private boolean status;

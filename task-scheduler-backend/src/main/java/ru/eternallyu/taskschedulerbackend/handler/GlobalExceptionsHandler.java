@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.eternallyu.taskschedulerbackend.exception.AlreadyExistsException;
 import ru.eternallyu.taskschedulerbackend.exception.NotFoundException;
 import ru.eternallyu.taskschedulerbackend.exception.UserAuthenticationException;
-import ru.eternallyu.taskschedulerbackend.service.dto.ErrorDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.error.ErrorDto;
 
 @RestControllerAdvice
 public class GlobalExceptionsHandler {

@@ -2,13 +2,13 @@ package ru.eternallyu.taskschedulerbackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.eternallyu.taskschedulerbackend.service.dto.user.UserRequestDto;
 import ru.eternallyu.taskschedulerbackend.entity.User;
 import ru.eternallyu.taskschedulerbackend.exception.AlreadyExistsException;
 import ru.eternallyu.taskschedulerbackend.exception.NotFoundException;
 import ru.eternallyu.taskschedulerbackend.mapper.UserMapper;
 import ru.eternallyu.taskschedulerbackend.repository.UserRepository;
-import ru.eternallyu.taskschedulerbackend.service.dto.user.UserResponseDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.RequestUserDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.user.ResponseUserDto;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserRequestDto findUserByEmail(String email) {
+    public RequestUserDto findUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
         return userMapper.userToUserRequestDto(user);
     }
@@ -32,7 +32,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<UserResponseDto> findAllUsers() {
+    public List<ResponseUserDto> findAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(userMapper::userToUserResponseDto).toList();
     }

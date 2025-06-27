@@ -11,10 +11,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import ru.eternallyu.taskschedulerbackend.service.dto.kafka.EmailSendingDto;
 
-@Component
-@KafkaListener(topics = "${app.kafka.topic.name}")
 @Log4j2
 @RequiredArgsConstructor
+@KafkaListener(topics = "${app.kafka.topic.name}")
+@Component
 public class EventHandler {
 
     private final JavaMailSender mailSender;
@@ -34,6 +34,7 @@ public class EventHandler {
             message.setText(emailSendingDto.getMessage());
 
             mailSender.send(message);
+            log.info("Email sent successfully: {}", emailSendingDto.getMessage());
         } catch (MailException exception) {
             log.error("Failed to send email: {}", emailSendingDto.getMessage());
         }

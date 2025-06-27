@@ -5,17 +5,14 @@ import org.springframework.stereotype.Service;
 import ru.eternallyu.taskschedulerbackend.entity.Task;
 import ru.eternallyu.taskschedulerbackend.entity.User;
 import ru.eternallyu.taskschedulerbackend.exception.NotFoundException;
-import ru.eternallyu.taskschedulerbackend.exception.UserAuthenticationException;
 import ru.eternallyu.taskschedulerbackend.mapper.TaskMapper;
-import ru.eternallyu.taskschedulerbackend.mapper.UserMapper;
 import ru.eternallyu.taskschedulerbackend.repository.TaskRepository;
 import ru.eternallyu.taskschedulerbackend.repository.UserRepository;
-import ru.eternallyu.taskschedulerbackend.service.dto.task.CreateTaskDto;
-import ru.eternallyu.taskschedulerbackend.service.dto.task.TaskDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.task.RequestCreateTaskDto;
+import ru.eternallyu.taskschedulerbackend.service.dto.task.ResponseTaskDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,20 +25,20 @@ public class TaskService {
     private final TaskMapper taskMapper;
 
 
-    public List<TaskDto> findTasksByEmail(String email) {
+    public List<ResponseTaskDto> findTasksByEmail(String email) {
         List<Task> tasks = taskRepository.findAllByUserEmail(email);
         return tasks.stream().map(taskMapper::taskToTaskDto).toList();
     }
 
-    public TaskDto createTask(CreateTaskDto createTaskDto, String email) {
+    public ResponseTaskDto createTask(RequestCreateTaskDto requestCreateTaskDto, String email) {
         User user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         Task task = Task.builder()
                 .user(user)
-                .title(createTaskDto.getTitle())
-                .description(createTaskDto.getDescription())
+                .title(requestCreateTaskDto.getTitle())
+                .description(requestCreateTaskDto.getDescription())
                 .build();
 
         Task saved = taskRepository.save(task);
@@ -49,7 +46,7 @@ public class TaskService {
         return taskMapper.taskToTaskDto(saved);
     }
 
-    public TaskDto updateTask(Long id, CreateTaskDto dto, String userEmail) {
+    public ResponseTaskDto updateTask(Long id, RequestCreateTaskDto dto, String userEmail) {
         Task task = taskRepository
                 .findByIdAndUserEmail(id, userEmail)
                 .orElseThrow(() ->
@@ -62,7 +59,7 @@ public class TaskService {
         return taskMapper.taskToTaskDto(saved);
     }
 
-    public TaskDto updateTaskStatus(Long id, boolean status, String userEmail) {
+    public ResponseTaskDto updateTaskStatus(Long id, boolean status, String userEmail) {
         Task task = taskRepository
                 .findByIdAndUserEmail(id, userEmail)
                 .orElseThrow(() ->
@@ -88,7 +85,7 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    public List<TaskDto> findTasksByUserId(Long id) {
+    public List<ResponseTaskDto> findTasksByUserId(Long id) {
         List<Task> tasks = taskRepository.findAllByUserId(id);
         return tasks.stream().map(taskMapper::taskToTaskDto).toList();
     }

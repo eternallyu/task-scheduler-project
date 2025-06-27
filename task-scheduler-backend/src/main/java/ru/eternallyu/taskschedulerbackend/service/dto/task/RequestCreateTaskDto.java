@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Setter
 @NoArgsConstructor
-public class CreateTaskDto {
+public class RequestCreateTaskDto {
 
     @NotBlank(message = "Title is blank")
     private String title;

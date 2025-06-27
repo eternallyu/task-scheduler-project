@@ -10,9 +10,9 @@ import ru.eternallyu.taskschedulerservice.service.dto.kafka.EmailSendingDto;
 
 import java.util.List;
 
-@Service
 @Log4j2
 @RequiredArgsConstructor
+@Service
 public class ScheduledTaskService {
 
     private final ReportGeneratorService reportGenerator;
