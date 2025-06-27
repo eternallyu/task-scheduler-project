@@ -1,0 +1,22 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+allprojects {
+    group = 'ru.eternallyu.taskscheduler'
+    version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
+}

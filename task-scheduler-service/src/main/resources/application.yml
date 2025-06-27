@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: task-scheduler-service
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        acks: 1
+        spring:
+          json:
+            add:
+              type:
+                headers: false
+
+server:
+  port: 8002
+
+task:
+  cron:
+    expression: 0 0 0 * * *
+
+app:
+  kafka:
+    topic:
+      name: EMAIL_SENDING_TASKS
+    email:
+      type: REPORT
+
+backend:
+  base-url: http://localhost:8001

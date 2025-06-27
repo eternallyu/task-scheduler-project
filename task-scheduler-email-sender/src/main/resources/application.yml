@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: task-scheduler-email-sender
+
+  kafka:
+    bootstrap-servers: localhost:29092
+
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring.json.value.default.type: ru.eternallyu.taskschedulerbackend.service.dto.kafka.EmailSendingDto
+        spring.json.trusted.packages: "*"
+      group-id: email-sender-group
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SPRING_MAIL_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          from: ${spring.mail.username}
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8003
+
+app:
+  kafka:
+    topic:
+      name: EMAIL_SENDING_TASKS
