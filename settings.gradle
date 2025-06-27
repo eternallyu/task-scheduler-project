@@ -1,0 +1,5 @@
+rootProject.name = 'task-scheduler-project'
+
+include 'task-scheduler-backend'
+include 'task-scheduler-email-sender'
+include 'task-scheduler-service'

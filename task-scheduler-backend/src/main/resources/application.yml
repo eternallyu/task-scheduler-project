@@ -5,7 +5,7 @@ spring:
   datasource:
     username: db_user
     password: password
-    url: jdbc:postgresql://localhost:5454/task-scheduler-storage
+    url: jdbc:postgresql://localhost:5454/task_scheduler_storage
     driver-class-name: org.postgresql.Driver
 
   jpa:

@@ -1,0 +1,105 @@
+services:
+  #################################
+  # Zookeeper
+  #################################
+  zookeeper:
+    image: bitnami/zookeeper:3.8
+    container_name: zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: bitnami/kafka:3.6
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
+  #################################
+  # PostgreSQL
+  #################################
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_scheduler_storage
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - '5454:5432'
+    restart: unless-stopped
+
+  #################################
+  # Backend (8001)
+  #################################
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task_scheduler_storage
+      SPRING_DATASOURCE_USERNAME: db_user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      JWT_SECRET: dGhpcyBpcyBhIHN1cGVyIHNlY3JldCBrZXkgZm9yIGp3dA==
+    depends_on:
+      - postgres
+      - kafka
+    ports:
+      - '8001:8001'
+    restart: on-failure
+
+  #################################
+  # Scheduler (8002)
+  #################################
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: scheduler
+    environment:
+      BACKEND_BASE_URL: http://backend:8001
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      TASK_CRON_EXPRESSION: '0 0 0 * * *'
+    depends_on:
+      - backend
+      - kafka
+    ports:
+      - '8002:8002'
+    restart: on-failure
+
+  #################################
+  # Email Sender (8003)
+  #################################
+  email-sender:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: email-sender
+    environment:
+      SPRING_MAIL_USERNAME:
+      SPRING_MAIL_PASSWORD:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - kafka
+    ports:
+      - '8003:8003'
+    restart: on-failure
+
+volumes:
+  postgres_data:
+
+
+
+
